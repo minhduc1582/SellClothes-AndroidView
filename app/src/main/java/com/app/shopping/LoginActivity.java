@@ -17,6 +17,7 @@ import com.app.shopping.Api.ApiService;
 import com.app.shopping.Model.Products;
 import com.app.shopping.Model.Products2;
 import com.app.shopping.Model.User;
+import com.app.shopping.Model.Users;
 import com.app.shopping.Prevalent.Prevalent;
 import com.rey.material.widget.CheckBox;
 
@@ -33,6 +34,7 @@ public class LoginActivity extends AppCompatActivity {
     private String parentDbName = "Users";
     private CheckBox chkBoxRememberMe;
     private static int level = 1;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -45,6 +47,7 @@ public class LoginActivity extends AppCompatActivity {
         loadingBar = new ProgressDialog(this);
         chkBoxRememberMe = (CheckBox) findViewById(R.id.remember_me_chkb);
         Paper.init(this);
+        Prevalent.currentOnlineUser = new Users("12","12","12",null,"");
         LoginButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -109,47 +112,18 @@ public class LoginActivity extends AppCompatActivity {
             Paper.book().write(Prevalent.UserPasswordKey, password);
         }
         Toast.makeText(LoginActivity.this, "Welcome Admin, you are logged in Successfully...", Toast.LENGTH_SHORT).show();
-        Intent intent = new Intent(LoginActivity.this, com.app.shopping.AdminCategoryActivity.class);
+        loadingBar.dismiss();
+        Intent intent = new Intent(LoginActivity.this,AdminCategoryActivity.class);
         startActivity(intent);
-   //     User user = new User("",phone,password,level,"");
-//        ApiService.apiService.isUserOrAdmin(1).enqueue(new Callback<Products2>() {
-//            @Override
-//            public void onResponse(Call<Products2> call, Response<Products2> response) {
-//                Toast.makeText(LoginActivity.this, "Welcome Admin, you are logged in Successfully...", Toast.LENGTH_SHORT).show();
-//                loadingBar.dismiss();
-//
-//                Products2 p = response.body();
-//                //    if(user.getName() !=  null){
-//                //Log.e("api",p.toString());
-//                Intent intent = new Intent(LoginActivity.this, com.app.shopping.AdminCategoryActivity.class);
-//                startActivity(intent);
-////                }
-//
-//            }
+//        ApiService.apiService.checkLogin(phone,level).enqueue(new Callback<Users>() {
 //
 //            @Override
-//            public void onFailure(Call<Products2> call, Throwable t) {
-//                Toast.makeText(LoginActivity.this, "Account with this " + phone + " number do not exists.", Toast.LENGTH_SHORT).show();
-//                loadingBar.dismiss();
-//                Intent intent = new Intent(LoginActivity.this, com.app.shopping.AdminCategoryActivity.class);
-//                startActivity(intent);
-//            }
-//
-//
-//        });
-//        final DatabaseReference RootRef;
-//        RootRef = FirebaseDatabase.getInstance().getReference();
-//        RootRef.addListenerForSingleValueEvent(new ValueEventListener() {
-//            @Override
-//            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-//                if (dataSnapshot.child(parentDbName).child(phone).exists()){
-//
-//                    Users usersData = dataSnapshot.child(parentDbName).child(phone).getValue(Users.class);
-//                    if (usersData.getPhone().equals(phone))
-//                    {
+//            public void onResponse(Call<Users> call, Response<Users> response) {
+//                Users usersData = response.body();
+//                if (usersData!=null){
 //                        if (usersData.getPassword().equals(password))
 //                        {
-//                            if(parentDbName.equals("Admins"))
+//                            if(level==2)
 //                            {
 //                                Toast.makeText(LoginActivity.this, "Welcome Admin, you are logged in Successfully...", Toast.LENGTH_SHORT).show();
 //                                loadingBar.dismiss();
@@ -157,7 +131,7 @@ public class LoginActivity extends AppCompatActivity {
 //                                Intent intent = new Intent(LoginActivity.this, com.dhruva.shopping.AdminCategoryActivity.class);
 //                                startActivity(intent);
 //                            }
-//                            else if (parentDbName.equals("Users")){
+//                            else {
 //                                Toast.makeText(LoginActivity.this, "logged in Successfully...", Toast.LENGTH_SHORT).show();
 //                                loadingBar.dismiss();
 //
@@ -171,7 +145,7 @@ public class LoginActivity extends AppCompatActivity {
 //                            loadingBar.dismiss();
 //                            Toast.makeText(LoginActivity.this,"Password is incorrect",Toast.LENGTH_SHORT).show();
 //                        }
-//                    }
+//
 //                }
 //                else {
 //                    Toast.makeText(LoginActivity.this, "Account with this " + phone + " number do not exists.", Toast.LENGTH_SHORT).show();
@@ -179,9 +153,12 @@ public class LoginActivity extends AppCompatActivity {
 //                }
 //            }
 //
-//            @Override
-//            public void onCancelled(DatabaseError databaseError) {
 //
+//
+//
+//            @Override
+//            public void onFailure(Call<Users> call, Throwable t) {
+//                Toast.makeText(LoginActivity.this, "Call API fail", Toast.LENGTH_SHORT).show();
 //            }
 //        });
     }

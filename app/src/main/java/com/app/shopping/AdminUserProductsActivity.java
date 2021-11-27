@@ -65,8 +65,8 @@ public class AdminUserProductsActivity extends AppCompatActivity {
     protected void onStart() {
         super.onStart();
         cartListRef = new ArrayList<Cart>();
-        cartListRef.add(new Cart("1","1","1","1"));
-        cartListRef.add(new Cart("2","2","2","2"));
+        cartListRef.add(new Cart("1","1","1","1","1"));
+        cartListRef.add(new Cart("2","2","2","2","2"));
         CartAdapter adapter = new CartAdapter(cartListRef,this);
         productsList.setAdapter(adapter);
 //        FirebaseRecyclerOptions<Cart> options=

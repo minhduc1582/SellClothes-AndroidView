@@ -9,6 +9,7 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -17,8 +18,12 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
+
 import androidx.appcompat.widget.Toolbar;
 
+import com.app.shopping.Api.ApiService;
+import com.app.shopping.Model.Cart;
 import com.app.shopping.Model.Products;
 import com.app.shopping.Prevalent.Prevalent;
 import com.app.shopping.ViewHolder.ProductViewHolder;
@@ -30,11 +35,18 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.squareup.picasso.Picasso;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import de.hdodenhof.circleimageview.CircleImageView;
 import io.paperdb.Paper;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class HomeActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
-    private DatabaseReference ProductsRef;
+//    private DatabaseReference ProductsRef;
+    private List<Products> ProductsRef;
     DrawerLayout drawerLayout;
     NavigationView navigationView;
     Toolbar toolbar;
@@ -47,8 +59,21 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
-        ProductsRef = FirebaseDatabase.getInstance().getReference().child("Products");
+//        ProductsRef = FirebaseDatabase.getInstance().getReference().child("Products");
+        ApiService.apiService.getAllProduct().enqueue(new Callback<List<Products>>() {
 
+            @Override
+            public void onResponse(Call<List<Products>> call, Response<List<Products>> response) {
+                Toast.makeText(HomeActivity.this, "Call API success", Toast.LENGTH_SHORT).show();
+                ProductsRef = response.body();
+            }
+
+            @Override
+            public void onFailure(Call<List<Products>> call, Throwable t) {
+                Toast.makeText(HomeActivity.this, "Call API fail", Toast.LENGTH_SHORT).show();
+
+            }
+        });
         drawerLayout=findViewById(R.id.drawer_layout);
         navigationView=findViewById(R.id.nav_view);
         toolbar=findViewById(R.id.toolbar);
@@ -86,41 +111,53 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
     @Override
     protected void onStart() {
         super.onStart();
-        FirebaseRecyclerOptions<Products> options =
-                new FirebaseRecyclerOptions.Builder<Products>()
-                        .setQuery(ProductsRef, Products.class)
-                        .build();
 
-        FirebaseRecyclerAdapter<Products, ProductViewHolder> adapter =
-                new FirebaseRecyclerAdapter<Products, ProductViewHolder>(options) {
-                    @Override
-                    protected void onBindViewHolder(@NonNull ProductViewHolder holder, int position, @NonNull final Products model)
-                    {
-                        holder.txtProductName.setText(model.getPname());
-                        holder.txtProductDescription.setText(model.getDescription());
-                        holder.txtProductPrice.setText("Price = " + model.getPrice() + "Rs.");
-                        Picasso.get().load(model.getImage()).into(holder.imageView);
-                        holder.itemView.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View view) {
-                                Intent intent =new Intent(HomeActivity.this,ProductDetailsActivity.class);
-                                intent.putExtra("pid",model.getPid());
-                                startActivity(intent);
-                            }
-                        });
-                    }
+//        ProductsRef = new ArrayList<Products>();
+//        ProductsRef.add(new Products("jeans","a","10","https://res.cloudinary.com/dyvlzl3cw/image/upload/v1637232171/projects/pbl4/products/yaqndlavempc0fu4hwrj.jpg","","","",""));
 
-                    @NonNull
-                    @Override
-                    public ProductViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-                        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.product_items_layout, parent, false);
-                        ProductViewHolder holder = new ProductViewHolder(view);
-                        return holder;
-                    }
-                };
+        ProductsAdapter adapter = new ProductsAdapter(ProductsRef,this);
         recyclerView.setAdapter(adapter);
-        adapter.startListening();
 
+
+
+    }
+    public class ProductsAdapter extends RecyclerView.Adapter<ProductViewHolder> {
+        private List<Products> mListProducts;
+        private Context mContext;
+        public ProductsAdapter(List<Products> mListProducts, Context mContext) {
+            this.mListProducts = mListProducts;
+            this.mContext = mContext;
+        }
+
+        @NonNull
+        @Override
+        public ProductViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+            View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.product_items_layout, parent, false);
+            ProductViewHolder holder = new ProductViewHolder(view);
+            return holder;
+        }
+
+        @Override
+        public void onBindViewHolder(@NonNull ProductViewHolder holder, int position) {
+            Products model = mListProducts.get(position);
+            holder.txtProductName.setText(model.getPname());
+            holder.txtProductDescription.setText(model.getDescription());
+            holder.txtProductPrice.setText("Price = " + model.getPrice() + "VND");
+            Picasso.get().load(model.getImage()).into(holder.imageView);
+            holder.itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Intent intent =new Intent(HomeActivity.this,ProductDetailsActivity.class);
+                    intent.putExtra("pid",model.getPid());
+                    startActivity(intent);
+                }
+            });
+        }
+
+        @Override
+        public int getItemCount() {
+            return mListProducts.size();
+        }
     }
     @Override
     public void onBackPressed(){

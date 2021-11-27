@@ -3,17 +3,17 @@ package com.app.shopping.Model;
 
 
 public class Cart {
-    private String pid,pname,price,quantity;
+    private String pid,pname,price,quantity,idDetailorder;
 
     public Cart() {
     }
 
-    public Cart(String pid, String pname, String price, String quantity) {
+    public Cart(String pid, String pname, String price, String quantity, String idDetailorder) {
         this.pid = pid;
         this.pname = pname;
         this.price = price;
         this.quantity = quantity;
-      //  this.discount = discount;
+        this.idDetailorder = idDetailorder;
     }
 
     public String getPid() {
@@ -48,6 +48,13 @@ public class Cart {
         this.quantity = quantity;
     }
 
+    public String getIdDetailorder() {
+        return idDetailorder;
+    }
+
+    public void setIdDetailorder(String idDetailorder) {
+        this.idDetailorder = idDetailorder;
+    }
 //    public String getDiscount() {
 //        return discount;
 //    }

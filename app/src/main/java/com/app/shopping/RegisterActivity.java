@@ -13,6 +13,8 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.app.shopping.Api.ApiService;
+import com.app.shopping.Model.Users;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.DataSnapshot;
@@ -22,6 +24,10 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.HashMap;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class RegisterActivity extends AppCompatActivity {
     private Button CreateAccountButton;
@@ -72,36 +78,37 @@ public class RegisterActivity extends AppCompatActivity {
     }
 
     private void ValidatephoneNumber(final String name, final String phone,final String password) {
-        final DatabaseReference RootRef;
-        RootRef = FirebaseDatabase.getInstance().getReference();
-        RootRef.addListenerForSingleValueEvent(new ValueEventListener() {
+        //final DatabaseReference RootRef;
+       // RootRef = FirebaseDatabase.getInstance().getReference();
+        ApiService.apiService.checkLogin(phone,1).enqueue(new Callback<Users>(){
+
             @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                if (!(dataSnapshot.child("Users").child(phone).exists())){
+            public void onResponse(Call<Users> call, Response<Users> response) {
+                Users usersData= response.body();
+                Toast.makeText(RegisterActivity.this, "check phone success", Toast.LENGTH_SHORT).show();
+                if (usersData!=null){
                     HashMap<String, Object> userdataMap = new HashMap<>();
                     userdataMap.put("phone", phone);
                     userdataMap.put("password", password);
                     userdataMap.put("name", name);
-                    RootRef.child("Users").child(phone).updateChildren(userdataMap).addOnCompleteListener(new OnCompleteListener<Void>() {
-                        @Override
-                        public void onComplete(@NonNull Task<Void> task) {
+                    ApiService.apiService.addUser(userdataMap).enqueue(new Callback<Users>(){
 
-                            if (task.isSuccessful())
-                            {
+                        @Override
+                        public void onResponse(Call<Users> call, Response<Users> response) {
                                 Toast.makeText(RegisterActivity.this, "Congratulations, your account has been created.", Toast.LENGTH_SHORT).show();
                                 loadingBar.dismiss();
                                 Intent intent = new Intent(RegisterActivity.this, com.app.shopping.LoginActivity.class);
                                 startActivity(intent);
-                            }
-                            else
-                            {
-                                loadingBar.dismiss();
-                                Toast.makeText(RegisterActivity.this, "Network Error: Please try again after some time...", Toast.LENGTH_SHORT).show();
-                            }
+
+                        }
+
+                        @Override
+                        public void onFailure(Call<Users> call, Throwable t) {
+                            loadingBar.dismiss();
+                            Toast.makeText(RegisterActivity.this, "Call API addUser fail", Toast.LENGTH_SHORT).show();
+
                         }
                     });
-
-
 
                 }
                 else {
@@ -114,9 +121,11 @@ public class RegisterActivity extends AppCompatActivity {
             }
 
             @Override
-            public void onCancelled(DatabaseError databaseError) {
+            public void onFailure(Call<Users> call, Throwable t) {
+                Toast.makeText(RegisterActivity.this, "check phone fail", Toast.LENGTH_SHORT).show();
 
             }
         });
+
     }
 }

@@ -65,7 +65,7 @@ public class AdminCategoryActivity extends AppCompatActivity {
             public void onClick(View view)
             {
                 Intent intent = new Intent(AdminCategoryActivity.this, com.app.shopping.AdminAddNewProductActivity.class);
-                intent.putExtra("category", "Tshirts");
+                intent.putExtra("idCategory", "1");
                 startActivity(intent);
             }
         });
@@ -74,7 +74,7 @@ public class AdminCategoryActivity extends AppCompatActivity {
             public void onClick(View view)
             {
                 Intent intent = new Intent(AdminCategoryActivity.this, com.app.shopping.AdminAddNewProductActivity.class);
-                intent.putExtra("category", "Pants");
+                intent.putExtra("idCategory", "2");
                 startActivity(intent);
             }
         });
@@ -85,7 +85,7 @@ public class AdminCategoryActivity extends AppCompatActivity {
             public void onClick(View view)
             {
                 Intent intent = new Intent(AdminCategoryActivity.this, com.app.shopping.AdminAddNewProductActivity.class);
-                intent.putExtra("category", "Jeans");
+                intent.putExtra("idCategory", "3");
                 startActivity(intent);
             }
         });

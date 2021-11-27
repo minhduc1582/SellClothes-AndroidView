@@ -5,7 +5,11 @@
       <map>
         <entry key="..\:/Android/SellClothes-AndroidView-master/app/src/main/res/layout/activity_admin_category.xml" value="0.13020833333333334" />
         <entry key="..\:/Android/SellClothes-AndroidView-master/app/src/main/res/layout/activity_admin_new_orders.xml" value="0.2210144927536232" />
+        <entry key="..\:/Android/SellClothes-AndroidView-master/app/src/main/res/layout/activity_cart.xml" value="0.25416666666666665" />
+        <entry key="..\:/Android/SellClothes-AndroidView-master/app/src/main/res/layout/activity_home.xml" value="0.1358695652173913" />
         <entry key="..\:/Android/SellClothes-AndroidView-master/app/src/main/res/layout/activity_login.xml" value="0.13020833333333334" />
+        <entry key="..\:/Android/SellClothes-AndroidView-master/app/src/main/res/layout/content.xml" value="0.1358695652173913" />
+        <entry key="..\:/Android/SellClothes-AndroidView-master/app/src/main/res/layout/toolbar.xml" value="0.1358695652173913" />
         <entry key="..\:/_SEMESTER/ki 5/PBL4/ANDROID/ekart/app/src/main/res/layout/activity_admin_add_new_product.xml" value="0.16614583333333333" />
         <entry key="..\:/_SEMESTER/ki 5/PBL4/ANDROID/ekart/app/src/main/res/layout/activity_admin_new_orders.xml" value="0.121875" />
         <entry key="..\:/_SEMESTER/ki 5/PBL4/ANDROID/ekart/app/src/main/res/layout/activity_admin_user_products.xml" value="0.264" />

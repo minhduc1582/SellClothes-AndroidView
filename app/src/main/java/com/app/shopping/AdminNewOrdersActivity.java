@@ -6,7 +6,6 @@ import android.content.Intent;
 
 import android.os.Bundle;
 
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,13 +21,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.app.shopping.Api.ApiService;
 import com.app.shopping.Model.AdminOrders;
-import com.app.shopping.Model.Products2;
-import com.firebase.ui.database.FirebaseRecyclerAdapter;
-import com.firebase.ui.database.FirebaseRecyclerOptions;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import retrofit2.Call;
@@ -42,23 +35,23 @@ public class AdminNewOrdersActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_admin_new_orders);
-//        ApiService.apiService.getAllOrders().enqueue(new Callback<List<AdminOrders>>() {
-//            @Override
-//            public void onResponse(Call<List<AdminOrders>> call, Response<List<AdminOrders>> response) {
-//                Toast.makeText(AdminNewOrdersActivity.this, "Call API success", Toast.LENGTH_SHORT).show();
-//
-//                ordersRef = response.body();
-//
-//            }
-//
-//            @Override
-//            public void onFailure(Call<List<AdminOrders>> call, Throwable t) {
-//                Toast.makeText(AdminNewOrdersActivity.this, "Call API failure", Toast.LENGTH_SHORT).show();
-//
-//            }
-//
-//
-//        });
+        ApiService.apiService.getAllAdminOrders().enqueue(new Callback<List<AdminOrders>>() {
+            @Override
+            public void onResponse(Call<List<AdminOrders>> call, Response<List<AdminOrders>> response) {
+                Toast.makeText(AdminNewOrdersActivity.this, "Call API success", Toast.LENGTH_SHORT).show();
+
+                ordersRef = response.body();
+
+            }
+
+            @Override
+            public void onFailure(Call<List<AdminOrders>> call, Throwable t) {
+                Toast.makeText(AdminNewOrdersActivity.this, "Call API failure", Toast.LENGTH_SHORT).show();
+
+            }
+
+
+        });
 
         ordersList = findViewById(R.id.orders_list);
         ordersList.setLayoutManager(new LinearLayoutManager(this));
@@ -68,8 +61,8 @@ public class AdminNewOrdersActivity extends AppCompatActivity {
     protected void onStart() {
         super.onStart();
 
-        ordersRef = new ArrayList<AdminOrders>();
-        ordersRef.add(new AdminOrders("123","1","2","3","4","Not Shipped","Nov 03. 2021","Nov 03. 2021","429"));
+//        ordersRef = new ArrayList<AdminOrders>();
+//        ordersRef.add(new AdminOrders("123","1","2","3","4","Not Shipped","Nov 03. 2021","Nov 03. 2021","429"));
         AdminOrdersAdapter adapter = new AdminOrdersAdapter(ordersRef,this);
         ordersList.setAdapter(adapter);
     }

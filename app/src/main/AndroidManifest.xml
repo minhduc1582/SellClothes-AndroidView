@@ -13,6 +13,7 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
+        android:usesCleartextTraffic="true"
         android:theme="@style/Theme.Ekart"
         tools:replace="android:theme">
         <activity android:name="com.app.shopping.HomeActivity"
@@ -28,7 +29,9 @@
         <activity android:name="com.app.shopping.AdminUserProductsActivity" />
         <activity android:name="com.app.shopping.AdminNewOrdersActivity" />
         <activity android:name="com.app.shopping.AdminCategoryActivity" />
-        <activity android:name="com.app.shopping.AdminAddNewProductActivity" />
+        <activity android:name="com.app.shopping.AdminAddNewProductActivity"
+            android:exported="true"/>
+
         <activity android:name="com.app.shopping.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

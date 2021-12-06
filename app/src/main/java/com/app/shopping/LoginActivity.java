@@ -14,9 +14,6 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.app.shopping.Api.ApiService;
-import com.app.shopping.Model.Products;
-import com.app.shopping.Model.Products2;
-import com.app.shopping.Model.User;
 import com.app.shopping.Model.Users;
 import com.app.shopping.Prevalent.Prevalent;
 import com.rey.material.widget.CheckBox;
@@ -45,9 +42,9 @@ public class LoginActivity extends AppCompatActivity {
         AdminLink = (TextView) findViewById(R.id.admin_panel_link);
         NotAdminLink = (TextView) findViewById(R.id.not_admin_panel_link);
         loadingBar = new ProgressDialog(this);
-        chkBoxRememberMe = (CheckBox) findViewById(R.id.remember_me_chkb);
+        // chkBoxRememberMe = (CheckBox) findViewById(R.id.remember_me_chkb);
         Paper.init(this);
-        Prevalent.currentOnlineUser = new Users("12","12","12",null,"");
+       // Prevalent.currentOnlineUser = new Users("12", "12", "12", null, "");
         LoginButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -57,8 +54,7 @@ public class LoginActivity extends AppCompatActivity {
 
         AdminLink.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view)
-            {
+            public void onClick(View view) {
                 LoginButton.setText("Login Admin");
                 AdminLink.setVisibility(View.INVISIBLE);
                 NotAdminLink.setVisibility(View.VISIBLE);
@@ -68,8 +64,7 @@ public class LoginActivity extends AppCompatActivity {
         });
         NotAdminLink.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view)
-            {
+            public void onClick(View view) {
                 LoginButton.setText("Login");
                 AdminLink.setVisibility(View.VISIBLE);
                 NotAdminLink.setVisibility(View.INVISIBLE);
@@ -79,21 +74,16 @@ public class LoginActivity extends AppCompatActivity {
         });
 
     }
-    private void LoginUser()
-    {
+
+    private void LoginUser() {
         String phone = InputPhoneNumber.getText().toString();
         String password = InputPassword.getText().toString();
 
-        if (TextUtils.isEmpty(phone))
-        {
+        if (TextUtils.isEmpty(phone)) {
             Toast.makeText(this, "Please write your phone number...", Toast.LENGTH_SHORT).show();
-        }
-        else if (TextUtils.isEmpty(password))
-        {
+        } else if (TextUtils.isEmpty(password)) {
             Toast.makeText(this, "Please write your password...", Toast.LENGTH_SHORT).show();
-        }
-        else
-        {
+        } else {
             loadingBar.setTitle("Login Account");
             loadingBar.setMessage("Please wait, while we are checking the credentials.");
             loadingBar.setCanceledOnTouchOutside(false);
@@ -103,63 +93,44 @@ public class LoginActivity extends AppCompatActivity {
             AllowAccessToAccount(phone, password);
         }
     }
-    private void AllowAccessToAccount(final String phone, final String password)
-    {
 
-        if(chkBoxRememberMe.isChecked())
-        {
-            Paper.book().write(Prevalent.UserPhoneKey, phone);
-            Paper.book().write(Prevalent.UserPasswordKey, password);
-        }
-        Toast.makeText(LoginActivity.this, "Welcome Admin, you are logged in Successfully...", Toast.LENGTH_SHORT).show();
-        loadingBar.dismiss();
-        Intent intent = new Intent(LoginActivity.this,AdminCategoryActivity.class);
-        startActivity(intent);
-//        ApiService.apiService.checkLogin(phone,level).enqueue(new Callback<Users>() {
-//
-//            @Override
-//            public void onResponse(Call<Users> call, Response<Users> response) {
-//                Users usersData = response.body();
-//                if (usersData!=null){
-//                        if (usersData.getPassword().equals(password))
-//                        {
-//                            if(level==2)
-//                            {
-//                                Toast.makeText(LoginActivity.this, "Welcome Admin, you are logged in Successfully...", Toast.LENGTH_SHORT).show();
-//                                loadingBar.dismiss();
-//
-//                                Intent intent = new Intent(LoginActivity.this, com.dhruva.shopping.AdminCategoryActivity.class);
-//                                startActivity(intent);
-//                            }
-//                            else {
-//                                Toast.makeText(LoginActivity.this, "logged in Successfully...", Toast.LENGTH_SHORT).show();
-//                                loadingBar.dismiss();
-//
-//                                Intent intent = new Intent(LoginActivity.this, HomeActivity.class);
-//                                Prevalent.currentOnlineUser = usersData;
-//                                startActivity(intent);
-//                            }
-//
-//                        }
-//                        else {
-//                            loadingBar.dismiss();
-//                            Toast.makeText(LoginActivity.this,"Password is incorrect",Toast.LENGTH_SHORT).show();
-//                        }
-//
-//                }
-//                else {
-//                    Toast.makeText(LoginActivity.this, "Account with this " + phone + " number do not exists.", Toast.LENGTH_SHORT).show();
-//                    loadingBar.dismiss();
-//                }
-//            }
-//
-//
-//
-//
-//            @Override
-//            public void onFailure(Call<Users> call, Throwable t) {
-//                Toast.makeText(LoginActivity.this, "Call API fail", Toast.LENGTH_SHORT).show();
-//            }
-//        });
+    private void AllowAccessToAccount(final String phone, final String password) {
+//        Toast.makeText(LoginActivity.this, "Welcome Admin, you are logged in Successfully...", Toast.LENGTH_SHORT).show();
+//        loadingBar.dismiss();
+//        Intent intent = new Intent(LoginActivity.this,AdminCategoryActivity.class);
+//        startActivity(intent);
+        ApiService.apiService.checkLogin(phone, password, level).enqueue(new Callback<Users>() {
+
+            @Override
+            public void onResponse(Call<Users> call, Response<Users> response) {
+                Users usersData = response.body();
+                if (usersData != null) {
+                    if (level == 2) {
+                        Toast.makeText(LoginActivity.this, "Welcome Admin, you are logged in Successfully...", Toast.LENGTH_SHORT).show();
+                        loadingBar.dismiss();
+
+                        Intent intent = new Intent(LoginActivity.this, AdminCategoryActivity.class);
+                        startActivity(intent);
+                    } else {
+                        Toast.makeText(LoginActivity.this, "logged in Successfully...", Toast.LENGTH_SHORT).show();
+                        loadingBar.dismiss();
+
+                        Intent intent = new Intent(LoginActivity.this, HomeActivity.class);
+                        Prevalent.currentOnlineUser = usersData;
+                        Log.e("abc",Prevalent.currentOnlineUser.getPhone());
+                        startActivity(intent);
+                    }
+
+                } else {
+                    Toast.makeText(LoginActivity.this, "Wrong account or password please try again.", Toast.LENGTH_SHORT).show();
+                    loadingBar.dismiss();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Users> call, Throwable t) {
+                Toast.makeText(LoginActivity.this, "Call API fail", Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 }

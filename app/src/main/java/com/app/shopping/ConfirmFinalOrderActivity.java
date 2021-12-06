@@ -14,6 +14,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.app.shopping.Api.ApiService;
 import com.app.shopping.Model.Orders;
+import com.app.shopping.Model.Shipments;
 import com.app.shopping.Prevalent.Prevalent;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -33,7 +34,7 @@ public class ConfirmFinalOrderActivity extends AppCompatActivity {
     private EditText nameEditText,phoneEditText,addressEditText,cityEditText;
     private Button confirmOrderBtn;
     private String totalAmount = "";
-    private Orders ordersRef;
+    private List<Orders> ordersRef;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -80,25 +81,26 @@ public class ConfirmFinalOrderActivity extends AppCompatActivity {
         saveCurrentDate = currentDate.format(calForDate.getTime());
         SimpleDateFormat currentTime = new SimpleDateFormat("HH:mm:ss a");
         saveCurrentTime = currentDate.format(calForDate.getTime());
-        ApiService.apiService.getOrdersByUID(Prevalent.currentOnlineUser.getPhone()).enqueue(new Callback<Orders>() {
+//        Prevalent.currentOnlineUser.getPhone())
+        ApiService.apiService.getOrdersByUID(Prevalent.currentOnlineUser.getPhone()).enqueue(new Callback<List<Orders>>() {
 
             @Override
-            public void onResponse(Call<Orders> call, Response<Orders> response) {
+            public void onResponse(Call<List<Orders>> call, Response<List<Orders>> response) {
                 ordersRef = response.body();
             }
 
             @Override
-            public void onFailure(Call<Orders> call, Throwable t) {
+            public void onFailure(Call<List<Orders>> call, Throwable t) {
 
             }
         });
 //        final DatabaseReference ordersRef= FirebaseDatabase.getInstance().getReference()
 //                .child("Orders")
 //                .child(Prevalent.currentOnlineUser.getPhone());
-        HashMap<String, Object> ordersMap = new HashMap<>();
-        ordersMap.put("totalAmount",totalAmount);
-        ordersMap.put("state", "Confirmed");
-        ApiService.apiService.updateOrders(ordersMap).enqueue(new Callback<Orders>() {
+       // Orders ordersRef = new Orders();
+        ordersRef.get(0).setTotalAmount(totalAmount);
+        ordersRef.get(0).setState("Confirmed");
+        ApiService.apiService.updateOrders(ordersRef.get(0)).enqueue(new Callback<Orders>() {
 
             @Override
             public void onResponse(Call<Orders> call, Response<Orders> response) {
@@ -110,14 +112,14 @@ public class ConfirmFinalOrderActivity extends AppCompatActivity {
 
             }
         });
-        HashMap<String, Object> ordersShipment = new HashMap<>();
-        ordersShipment.put("name",nameEditText.getText().toString());
-        ordersShipment.put("phone",phoneEditText.getText().toString());
-        ordersShipment.put("address",addressEditText.getText().toString());
-        ordersShipment.put("city",cityEditText.getText().toString());
-        ordersShipment.put("date",saveCurrentDate);
-        ordersShipment.put("time",saveCurrentTime);
-        ordersShipment.put("idOrder",ordersRef.getIdOrder());
+        Shipments ordersShipment = new Shipments();
+        ordersShipment.setName(nameEditText.getText().toString());
+        ordersShipment.setPhone(phoneEditText.getText().toString());
+        ordersShipment.setAddress(addressEditText.getText().toString());
+        ordersShipment.setCity(cityEditText.getText().toString());
+        ordersShipment.setDate(saveCurrentDate);
+        ordersShipment.setTime(saveCurrentTime);
+        ordersShipment.setIdOrder(ordersRef.get(0).getIdOrder());
         ApiService.apiService.addShipment(ordersShipment).enqueue(new Callback<Void>() {
 
             @Override

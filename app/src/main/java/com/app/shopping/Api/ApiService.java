@@ -1,20 +1,16 @@
 package com.app.shopping.Api;
 
 
-import android.app.DownloadManager;
-
 import com.app.shopping.Model.AdminOrders;
 import com.app.shopping.Model.Cart;
 import com.app.shopping.Model.DetailOrder;
 import com.app.shopping.Model.Orders;
 import com.app.shopping.Model.Products;
-import com.app.shopping.Model.Products2;
+import com.app.shopping.Model.Shipments;
 import com.app.shopping.Model.Users;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.app.shopping.Model.User;
 
-import java.util.HashMap;
 import java.util.List;
 
 import okhttp3.MultipartBody;
@@ -25,9 +21,9 @@ import retrofit2.converter.gson.GsonConverterFactory;
 import retrofit2.http.Body;
 import retrofit2.http.DELETE;
 import retrofit2.http.GET;
-import retrofit2.http.HTTP;
 import retrofit2.http.Multipart;
 import retrofit2.http.POST;
+import retrofit2.http.PUT;
 import retrofit2.http.Part;
 import retrofit2.http.Query;
 
@@ -55,36 +51,38 @@ public interface ApiService {
     Call<Void> removeOrderByUID(String uID); //xóa bản ghi trong bảng Orders có uID= "uID"
     @Multipart
     @POST("v1/products/add")
- //   @POST()
     Call<Products> addProduct(@Part("name") RequestBody pname,
                           @Part("description")RequestBody description,
                           @Part("price")RequestBody price,
                           @Part("idcategory")RequestBody idcategory,
                           @Part MultipartBody.Part image); // thêm vào bảng product
-    @GET
-    Call<Users> checkLogin(String phone, int level); // trong bảng User trả về User có phone=phone   level=level
-    @POST
-    Call<Users> addUser(HashMap<String, Object> userdataMap); // add User phone name password
-    @GET
+    @GET("v1/accounts/login")
+    Call<Users> checkLogin(@Query("phone") String phone,
+                           @Query("password") String password,
+                           @Query("level") int level); // trong bảng User trả về User có phone=phone   level=level
+    @POST("v1/accounts")
+    Call<Users> addUser(@Body Users userdata); // add User phone name password
+    @GET("v1/products")
     Call<List<Products>> getAllProduct(); // trả về list<Product>
-    @GET
-    Call<Orders> getOrdersByUID(String phone);// trả về Orders có uID=phone
-    @POST
-    Call<Orders> addOrder(String phone, String state);// add Order uID=phone, state=state
-    @GET
-    Call<DetailOrder> getDetailOrdersByIdorderAndPid(String idOrder, String productID);//get detailorder by idorder and pid
-    @POST
-    Call<DetailOrder> addDetailOrder(HashMap<String, Object> cartMap); // add detailOrder
-    @POST
-    Call<DetailOrder> updateDetailOrder(HashMap<String, Object> cartMap); // update detailOrder
-    @GET
-    Call<Products> getProductByPid(String productID); // Bang product
-    @DELETE
-    Call<Void> removeDetailOrderById(String idDetailorder); // Bang DetailOrder
-    @POST
-    Call<Void> addShipment(HashMap<String, Object> ordersShipment); // Bang shipment
-    @POST
-    Call<Orders> updateOrders(HashMap<String, Object> ordersMap); // Bang Order
-    @GET
-    Call<List<Products>> getProductByName(String searchInput); // Bang Product
+    @GET("v1/orders/getorderbyuid")
+    Call<List<Orders>> getOrdersByUID(@Query("uid") String uid);// trả về Orders có uID=phone
+    @POST("v1/orders/add")
+    Call<Orders> addOrder(@Body Orders order);// add Order uID=phone, state=state
+    @GET("v1/detailorders/getbypidandoid")
+    Call<List<DetailOrder>> getDetailOrdersByIdorderAndPid(@Query("idOrder") String idOrder,
+                                                     @Query("productID") String productID);//get detailorder by idorder and pid
+    @POST("v1/detailorders/add")
+    Call<DetailOrder> addDetailOrder(@Body DetailOrder detailOrder); // add detailOrder
+    @PUT("v1/detailorders/update")
+    Call<DetailOrder> updateDetailOrder(@Body DetailOrder detailOrder); // update detailOrder
+    @GET("v1/products/getbyid")
+    Call<Products> getProductByPid(@Query("idProduct") int pid); // Bang product
+    @DELETE("v1/detailorders/delete")
+    Call<Void> removeDetailOrderById(@Query("idProduct") String idDetailorder); // Bang DetailOrder
+    @POST("v1/shipmentdetails/add")
+    Call<Void> addShipment(@Body Shipments ordersShipment); // Bang shipment
+    @PUT("v1/orders/update")
+    Call<Orders> updateOrders(@Body Orders ordersRef); // Bang Order
+    @GET("v1/products/getbyname")
+    Call<List<Products>> getProductByName(@Query("nameProduct") String searchInput); // Bang Product
 }

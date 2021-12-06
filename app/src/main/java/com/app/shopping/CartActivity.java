@@ -231,12 +231,13 @@ public class CartActivity extends AppCompatActivity{
     }
     private void CheckOrderState()
     {
-        ApiService.apiService.getOrdersByUID(Prevalent.currentOnlineUser.getPhone()).enqueue(new Callback<Orders>() {
+//        Prevalent.currentOnlineUser.getPhone()
+        ApiService.apiService.getOrdersByUID(Prevalent.currentOnlineUser.getPhone()).enqueue(new Callback<List<Orders>>() {
 
             @Override
-            public void onResponse(Call<Orders> call, Response<Orders> response) {
-                Orders Order = response.body();
-                if (Order != null && Order.getState()=="Confirmed") {
+            public void onResponse(Call<List<Orders>> call, Response<List<Orders>> response) {
+                List<Orders> Order = response.body();
+                if (Order != null && Order.get(0).getState()=="Confirmed") {
                     txtTotalAmount.setText("Shipping State = Not Shipped");
                     recyclerView.setVisibility(View.GONE);
                     txtMsg1.setVisibility(View.VISIBLE);
@@ -248,7 +249,7 @@ public class CartActivity extends AppCompatActivity{
             }
 
             @Override
-            public void onFailure(Call<Orders> call, Throwable t) {
+            public void onFailure(Call<List<Orders>> call, Throwable t) {
                 Toast.makeText(CartActivity.this, "Call API fail", Toast.LENGTH_SHORT).show();
             }
         });

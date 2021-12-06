@@ -3,12 +3,12 @@ package com.app.shopping.Model;
 public class DetailOrder {
     private String idDetailorder,pid,quantity,idOrder;
 
-    public DetailOrder(String idDetailorder, String pid, String quantity, String idOrder) {
-        this.idDetailorder = idDetailorder;
-        this.pid = pid;
-        this.quantity = quantity;
-        this.idOrder = idOrder;
-    }
+//    public DetailOrder(String idDetailorder, String pid, String quantity, String idOrder) {
+//        this.idDetailorder = idDetailorder;
+//        this.pid = pid;
+//        this.quantity = quantity;
+//        this.idOrder = idOrder;
+//    }
 
     public String getIdDetailorder() {
         return idDetailorder;

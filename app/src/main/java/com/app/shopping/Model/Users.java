@@ -54,4 +54,15 @@ public class Users {
     public void setAddress(String address) {
         this.address = address;
     }
+
+    @Override
+    public String toString() {
+        return "Users{" +
+                "name='" + name + '\'' +
+                ", phone='" + phone + '\'' +
+                ", password='" + password + '\'' +
+                ", image='" + image + '\'' +
+                ", address='" + address + '\'' +
+                '}';
+    }
 }

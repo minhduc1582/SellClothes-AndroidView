@@ -1,14 +1,14 @@
 package com.app.shopping.Model;
 
 public class Orders {
-    private String idOrder, totalAmount, state, uID;
+    private String idOrder, totalAmount, state, uid;
 
-    public Orders(String idOrder, String totalAmount, String state, String uID) {
-        this.idOrder = idOrder;
-        this.totalAmount = totalAmount;
-        this.state = state;
-        this.uID = uID;
-    }
+//    public Orders(String idOrder, String totalAmount, String state, String uid) {
+//        this.idOrder = idOrder;
+//        this.totalAmount = totalAmount;
+//        this.state = state;
+//        this.uid = uid;
+//    }
 
     public String getIdOrder() {
         return idOrder;
@@ -34,12 +34,12 @@ public class Orders {
         this.state = state;
     }
 
-    public String getuID() {
-        return uID;
+    public String getUid() {
+        return uid;
     }
 
-    public void setuID(String uID) {
-        this.uID = uID;
+    public void setUid(String uid) {
+        this.uid = uid;
     }
 
     @Override
@@ -48,7 +48,7 @@ public class Orders {
                 "idOrder='" + idOrder + '\'' +
                 ", totalAmount='" + totalAmount + '\'' +
                 ", state='" + state + '\'' +
-                ", uID='" + uID + '\'' +
+                ", uid='" + uid + '\'' +
                 '}';
     }
 }

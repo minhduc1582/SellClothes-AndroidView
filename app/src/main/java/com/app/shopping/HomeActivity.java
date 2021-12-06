@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -57,23 +58,11 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         setContentView(R.layout.activity_home);
         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
-//        ProductsRef = FirebaseDatabase.getInstance().getReference().child("Products");
-        ApiService.apiService.getAllProduct().enqueue(new Callback<List<Products>>() {
+ //       ProductsRef = FirebaseDatabase.getInstance().getReference().child("Products");
 
-            @Override
-            public void onResponse(Call<List<Products>> call, Response<List<Products>> response) {
-                Toast.makeText(HomeActivity.this, "Call API success", Toast.LENGTH_SHORT).show();
-                ProductsRef = response.body();
-            }
-
-            @Override
-            public void onFailure(Call<List<Products>> call, Throwable t) {
-                Toast.makeText(HomeActivity.this, "Call API fail", Toast.LENGTH_SHORT).show();
-
-            }
-        });
         drawerLayout=findViewById(R.id.drawer_layout);
         navigationView=findViewById(R.id.nav_view);
         toolbar=findViewById(R.id.toolbar);
@@ -111,12 +100,27 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
     @Override
     protected void onStart() {
         super.onStart();
+        ApiService.apiService.getAllProduct().enqueue(new Callback<List<Products>>() {
 
-//        ProductsRef = new ArrayList<Products>();
-//        ProductsRef.add(new Products("jeans","a","10","https://res.cloudinary.com/dyvlzl3cw/image/upload/v1637232171/projects/pbl4/products/yaqndlavempc0fu4hwrj.jpg","","","",""));
+            @Override
+            public void onResponse(Call<List<Products>> call, Response<List<Products>> response) {
+                Toast.makeText(HomeActivity.this, "Call API success getAllProduct" , Toast.LENGTH_SHORT).show();
+                ProductsRef = response.body();
+                //Toast.makeText(HomeActivity.this, ProductsRef.size()+"" , Toast.LENGTH_SHORT).show();
+                Log.e("abc","1");
 
-        ProductsAdapter adapter = new ProductsAdapter(ProductsRef,this);
-        recyclerView.setAdapter(adapter);
+                ProductsAdapter adapter = new ProductsAdapter(ProductsRef,HomeActivity.this);
+                recyclerView.setAdapter(adapter);
+            }
+
+            @Override
+            public void onFailure(Call<List<Products>> call, Throwable t) {
+                Toast.makeText(HomeActivity.this, "Call API fail getAllProduct", Toast.LENGTH_SHORT).show();
+
+            }
+        });
+        Log.e("abc","2");
+
 
 
 
@@ -156,7 +160,10 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
 
         @Override
         public int getItemCount() {
-            return mListProducts.size();
+            if (mListProducts!=null){
+                return mListProducts.size();
+            }
+            return 0;
         }
     }
     @Override

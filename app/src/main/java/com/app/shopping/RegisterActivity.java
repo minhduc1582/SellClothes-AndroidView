@@ -33,6 +33,7 @@ public class RegisterActivity extends AppCompatActivity {
     private Button CreateAccountButton;
     private EditText InputName, InputPhoneNumber, InputPassword;
     private ProgressDialog loadingBar;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -49,83 +50,49 @@ public class RegisterActivity extends AppCompatActivity {
             }
         });
     }
-    private void CreateAccount(){
+
+    private void CreateAccount() {
         String name = InputName.getText().toString();
         String phone = InputPhoneNumber.getText().toString();
         String password = InputPassword.getText().toString();
-        if (TextUtils.isEmpty(name))
-        {
+        if (TextUtils.isEmpty(name)) {
             Toast.makeText(this, "Please write your name...", Toast.LENGTH_SHORT).show();
-        }
-        else if (TextUtils.isEmpty(phone))
-        {
+        } else if (TextUtils.isEmpty(phone)) {
             Toast.makeText(this, "Please write your phone number...", Toast.LENGTH_SHORT).show();
-        }
-        else if (TextUtils.isEmpty(password))
-        {
+        } else if (TextUtils.isEmpty(password)) {
             Toast.makeText(this, "Please write your password...", Toast.LENGTH_SHORT).show();
-        }
-        else
-        {
+        } else {
             loadingBar.setTitle("Create Account");
             loadingBar.setMessage("Please wait, while we are checking the credentials.");
             loadingBar.setCanceledOnTouchOutside(false);
             loadingBar.show();
 
-            ValidatephoneNumber(name, phone, password);
+            CreateAccountDB(name, phone, password);
         }
 
     }
 
-    private void ValidatephoneNumber(final String name, final String phone,final String password) {
-        //final DatabaseReference RootRef;
-       // RootRef = FirebaseDatabase.getInstance().getReference();
-        ApiService.apiService.checkLogin(phone,1).enqueue(new Callback<Users>(){
-
+    private void CreateAccountDB(final String name, final String phone, final String password) {
+        Users userdata = new Users();
+        userdata.setPhone(phone);
+        userdata.setPassword(password);
+        userdata.setName(name);
+        ApiService.apiService.addUser(userdata).enqueue(new Callback<Users>() {
             @Override
             public void onResponse(Call<Users> call, Response<Users> response) {
-                Users usersData= response.body();
-                Toast.makeText(RegisterActivity.this, "check phone success", Toast.LENGTH_SHORT).show();
-                if (usersData!=null){
-                    HashMap<String, Object> userdataMap = new HashMap<>();
-                    userdataMap.put("phone", phone);
-                    userdataMap.put("password", password);
-                    userdataMap.put("name", name);
-                    ApiService.apiService.addUser(userdataMap).enqueue(new Callback<Users>(){
-
-                        @Override
-                        public void onResponse(Call<Users> call, Response<Users> response) {
-                                Toast.makeText(RegisterActivity.this, "Congratulations, your account has been created.", Toast.LENGTH_SHORT).show();
-                                loadingBar.dismiss();
-                                Intent intent = new Intent(RegisterActivity.this, com.app.shopping.LoginActivity.class);
-                                startActivity(intent);
-
-                        }
-
-                        @Override
-                        public void onFailure(Call<Users> call, Throwable t) {
-                            loadingBar.dismiss();
-                            Toast.makeText(RegisterActivity.this, "Call API addUser fail", Toast.LENGTH_SHORT).show();
-
-                        }
-                    });
-
-                }
-                else {
-                    Toast.makeText(RegisterActivity.this, "This " + phone + " already exists.", Toast.LENGTH_SHORT).show();
-                    loadingBar.dismiss();
-                    Toast.makeText(RegisterActivity.this, "Please try again using another phone number.", Toast.LENGTH_SHORT).show();
-                    Intent intent = new Intent(RegisterActivity.this, com.app.shopping.MainActivity.class);
-                    startActivity(intent);
-                }
+                Toast.makeText(RegisterActivity.this, "Congratulations, your account has been created.", Toast.LENGTH_SHORT).show();
+                loadingBar.dismiss();
+                Intent intent = new Intent(RegisterActivity.this, com.app.shopping.LoginActivity.class);
+                startActivity(intent);
             }
-
             @Override
             public void onFailure(Call<Users> call, Throwable t) {
-                Toast.makeText(RegisterActivity.this, "check phone fail", Toast.LENGTH_SHORT).show();
-
+                Toast.makeText(RegisterActivity.this, "This " + phone + " already exists.", Toast.LENGTH_SHORT).show();
+                loadingBar.dismiss();
+                Toast.makeText(RegisterActivity.this, "Please try again using another phone number.", Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(RegisterActivity.this, com.app.shopping.MainActivity.class);
+                startActivity(intent);
             }
         });
-
     }
 }

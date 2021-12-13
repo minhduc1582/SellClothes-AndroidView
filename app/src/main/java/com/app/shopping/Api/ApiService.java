@@ -43,12 +43,12 @@ public interface ApiService {
 //        //  @HTTP(method = "GET", path = "accounts/login", hasBody = true)
 //    Call<Products2> isUserOrAdmin(@Query("idProduct") int id);
 
-    @GET("v1/adminorders")
+    @GET("v1/orders/getadminorder")
     Call<List<AdminOrders>> getAllAdminOrders();//trả về list bản ghi trong bảng Orders có state = "confirmed" có kiểu trả về là AdminOrders
-    @GET("v1/cart")
-    Call<List<Cart>> getListCartByUID(String userID);//trả về list bản ghi trong bảng detaiorder có uID=userID
-    @DELETE("v1/adminoders")
-    Call<Void> removeOrderByUID(String uID); //xóa bản ghi trong bảng Orders có uID= "uID"
+    @GET("v1/carts/getcartbyuid")
+    Call<List<Cart>> getListCartByUID(@Query("uid") String userID);//trả về list bản ghi trong bảng detaiorder có uID=userID
+    @DELETE("v1/orders/deleteorderbyuid")
+    Call<Void> removeOrderByUID(@Query("uid") String uID); //xóa bản ghi trong bảng Orders có uID= "uID"
     @Multipart
     @POST("v1/products/add")
     Call<Products> addProduct(@Part("name") RequestBody pname,

@@ -5,6 +5,7 @@ import android.content.Intent;
 
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -77,6 +78,7 @@ public class RegisterActivity extends AppCompatActivity {
         userdata.setPhone(phone);
         userdata.setPassword(password);
         userdata.setName(name);
+        userdata.setLevel("1");
         ApiService.apiService.addUser(userdata).enqueue(new Callback<Users>() {
             @Override
             public void onResponse(Call<Users> call, Response<Users> response) {
@@ -89,6 +91,7 @@ public class RegisterActivity extends AppCompatActivity {
             public void onFailure(Call<Users> call, Throwable t) {
                 Toast.makeText(RegisterActivity.this, "This " + phone + " already exists.", Toast.LENGTH_SHORT).show();
                 loadingBar.dismiss();
+                Log.e("abc",t.getMessage());
                 Toast.makeText(RegisterActivity.this, "Please try again using another phone number.", Toast.LENGTH_SHORT).show();
                 Intent intent = new Intent(RegisterActivity.this, com.app.shopping.MainActivity.class);
                 startActivity(intent);

@@ -1,5 +1,6 @@
 package com.app.shopping;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -102,8 +103,8 @@ public class ProductDetailsActivity extends AppCompatActivity {
             @Override
             public void onFailure(Call<List<Orders>> call, Throwable t) {
                 Toast.makeText(ProductDetailsActivity.this,"Call api fail getOrdersByUID",Toast.LENGTH_SHORT).show();
-            }
-        });
+                }
+            });
 
 
 
@@ -140,6 +141,8 @@ public class ProductDetailsActivity extends AppCompatActivity {
                     Log.e("abcd addDetailOrder",detailOrderRef.toString());
                     Log.e("abcd addDetailOrder",detailOrder.toString());
                     Toast.makeText(ProductDetailsActivity.this,"Added to cart List addDetailOrder",Toast.LENGTH_SHORT).show();
+                    Intent intent = new Intent(ProductDetailsActivity.this,HomeActivity.class);
+                    startActivity(intent);
                 }
 
                 @Override
@@ -149,13 +152,17 @@ public class ProductDetailsActivity extends AppCompatActivity {
             });
         } else {
             detailOrderRef.setIdDetailorder(detailOrder.get(0).getIdDetailorder());
+            Log.e("abcdf addDetailOrder",detailOrderRef.toString());
             ApiService.apiService.updateDetailOrder(detailOrderRef).enqueue(new Callback<DetailOrder>() {
+
 
                 @Override
                 public void onResponse(Call<DetailOrder> call, Response<DetailOrder> response) {
                     detailOrder.add(response.body());
                     Log.e("abcd updateDetailOrder",detailOrder.toString());
                     Toast.makeText(ProductDetailsActivity.this,"Updated to cart List updateDetailOrder",Toast.LENGTH_SHORT).show();
+                    Intent intent = new Intent(ProductDetailsActivity.this,HomeActivity.class);
+                    startActivity(intent);
                 }
 
                 @Override

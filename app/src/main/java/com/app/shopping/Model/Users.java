@@ -1,18 +1,26 @@
 package com.app.shopping.Model;
 
 public class Users {
-    private String name, phone, password, image, address;
+    private String name, phone, password, image, address, level;
     public Users()
     {
 
     }
 
-    public Users(String name, String phone, String password, String image, String address) {
-        this.name = name;
-        this.phone = phone;
-        this.password = password;
-        this.image = image;
-        this.address = address;
+//    public Users(String name, String phone, String password, String image, String address) {
+//        this.name = name;
+//        this.phone = phone;
+//        this.password = password;
+//        this.image = image;
+//        this.address = address;
+//    }
+
+    public String getLevel() {
+        return level;
+    }
+
+    public void setLevel(String level) {
+        this.level = level;
     }
 
     public String getName() {

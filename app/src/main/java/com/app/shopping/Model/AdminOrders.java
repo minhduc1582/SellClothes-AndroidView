@@ -1,13 +1,13 @@
 package com.app.shopping.Model;
 
 public class AdminOrders {
-    private String uID,name,phone,address,city,state,date,time,totalAmount;
+    private String uid,name,phone,address,city,state,date,time,totalAmount;
 
     public AdminOrders() {
     }
 
-    public AdminOrders(String uID,String name, String phone, String address, String city, String state, String date, String time, String totalAmount) {
-        this.uID=uID;
+    public AdminOrders(String uid, String name, String phone, String address, String city, String state, String date, String time, String totalAmount) {
+        this.uid = uid;
         this.name = name;
         this.phone = phone;
         this.address = address;
@@ -82,11 +82,26 @@ public class AdminOrders {
         this.totalAmount = totalAmount;
     }
 
-    public String getuID() {
-        return uID;
+    public String getUid() {
+        return uid;
     }
 
-    public void setuID(String uID) {
-        this.uID = uID;
+    public void setUid(String uid) {
+        this.uid = uid;
+    }
+
+    @Override
+    public String toString() {
+        return "AdminOrders{" +
+                "uid='" + uid + '\'' +
+                ", name='" + name + '\'' +
+                ", phone='" + phone + '\'' +
+                ", address='" + address + '\'' +
+                ", city='" + city + '\'' +
+                ", state='" + state + '\'' +
+                ", date='" + date + '\'' +
+                ", time='" + time + '\'' +
+                ", totalAmount='" + totalAmount + '\'' +
+                '}';
     }
 }

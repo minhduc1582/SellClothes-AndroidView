@@ -75,44 +75,49 @@ public class ConfirmFinalOrderActivity extends AppCompatActivity {
     }
 
     private void ConfirmOrder() {
-        final String saveCurrentTime,saveCurrentDate;
-        Calendar calForDate = Calendar.getInstance();
-        SimpleDateFormat currentDate = new SimpleDateFormat("MMM dd. yyy");
-        saveCurrentDate = currentDate.format(calForDate.getTime());
-        SimpleDateFormat currentTime = new SimpleDateFormat("HH:mm:ss a");
-        saveCurrentTime = currentDate.format(calForDate.getTime());
+
 //        Prevalent.currentOnlineUser.getPhone())
         ApiService.apiService.getOrdersByUID(Prevalent.currentOnlineUser.getPhone()).enqueue(new Callback<List<Orders>>() {
 
             @Override
             public void onResponse(Call<List<Orders>> call, Response<List<Orders>> response) {
                 ordersRef = response.body();
+                UpdateOrder();
             }
 
             @Override
             public void onFailure(Call<List<Orders>> call, Throwable t) {
-
+                Toast.makeText(ConfirmFinalOrderActivity.this,"fail 0",Toast.LENGTH_SHORT).show();
             }
         });
-//        final DatabaseReference ordersRef= FirebaseDatabase.getInstance().getReference()
-//                .child("Orders")
-//                .child(Prevalent.currentOnlineUser.getPhone());
-       // Orders ordersRef = new Orders();
+    }
+
+    private void UpdateOrder() {
         ordersRef.get(0).setTotalAmount(totalAmount);
         ordersRef.get(0).setState("Confirmed");
         ApiService.apiService.updateOrders(ordersRef.get(0)).enqueue(new Callback<Orders>() {
 
             @Override
             public void onResponse(Call<Orders> call, Response<Orders> response) {
-
+                Toast.makeText(ConfirmFinalOrderActivity.this,"Update orders success.",Toast.LENGTH_SHORT).show();
+                AddShipment();
             }
 
             @Override
             public void onFailure(Call<Orders> call, Throwable t) {
-
+                Toast.makeText(ConfirmFinalOrderActivity.this,"fail 2.",Toast.LENGTH_SHORT).show();
             }
         });
+    }
+
+    private void AddShipment() {
         Shipments ordersShipment = new Shipments();
+        final String saveCurrentTime,saveCurrentDate;
+        Calendar calForDate = Calendar.getInstance();
+        SimpleDateFormat currentDate = new SimpleDateFormat("MMM dd. yyy");
+        saveCurrentDate = currentDate.format(calForDate.getTime());
+        SimpleDateFormat currentTime = new SimpleDateFormat("HH:mm:ss a");
+        saveCurrentTime = currentDate.format(calForDate.getTime());
         ordersShipment.setName(nameEditText.getText().toString());
         ordersShipment.setPhone(phoneEditText.getText().toString());
         ordersShipment.setAddress(addressEditText.getText().toString());
@@ -132,34 +137,8 @@ public class ConfirmFinalOrderActivity extends AppCompatActivity {
 
             @Override
             public void onFailure(Call<Void> call, Throwable t) {
-
+                Toast.makeText(ConfirmFinalOrderActivity.this,"fail",Toast.LENGTH_SHORT).show();
             }
         });
-//        ordersRef.updateChildren(ordersMap).addOnCompleteListener(new OnCompleteListener<Void>() {
-//            @Override
-//            public void onComplete(@NonNull Task<Void> task) {
-//                if (task.isSuccessful()){
-//                    FirebaseDatabase.getInstance().getReference()
-//                            .child("Cart List")
-//                            .child("User view")
-//                            .child(Prevalent.currentOnlineUser.getPhone())
-//                            .removeValue()
-//                            .addOnCompleteListener(new OnCompleteListener<Void>() {
-//                                @Override
-//                                public void onComplete(@NonNull Task<Void> task) {
-//                                    if (task.isSuccessful()){
-//                                        Toast.makeText(ConfirmFinalOrderActivity.this,"Your final Order has been placed successfully.",Toast.LENGTH_SHORT).show();
-//                                        Intent intent = new Intent(ConfirmFinalOrderActivity.this,HomeActivity.class);
-//                                        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-//                                        startActivity(intent);
-//                                        finish();
-//                                    }
-//                                }
-//                            });
-//                }
-//            }
-//        });
-
-
     }
 }

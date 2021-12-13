@@ -6,6 +6,7 @@ import android.content.Intent;
 
 import android.os.Bundle;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -35,12 +36,27 @@ public class AdminNewOrdersActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_admin_new_orders);
+
+        ordersList = findViewById(R.id.orders_list);
+        ordersList.setLayoutManager(new LinearLayoutManager(this));
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+
+//        ordersRef = new ArrayList<AdminOrders>();
+//        ordersRef.add(new AdminOrders("123","1","2","3","4","Not Shipped","Nov 03. 2021","Nov 03. 2021","429"));
+
+
         ApiService.apiService.getAllAdminOrders().enqueue(new Callback<List<AdminOrders>>() {
             @Override
             public void onResponse(Call<List<AdminOrders>> call, Response<List<AdminOrders>> response) {
                 Toast.makeText(AdminNewOrdersActivity.this, "Call API success", Toast.LENGTH_SHORT).show();
 
                 ordersRef = response.body();
+                AdminOrdersAdapter adapter = new AdminOrdersAdapter(ordersRef,AdminNewOrdersActivity.this);
+                ordersList.setAdapter(adapter);
 
             }
 
@@ -53,18 +69,6 @@ public class AdminNewOrdersActivity extends AppCompatActivity {
 
         });
 
-        ordersList = findViewById(R.id.orders_list);
-        ordersList.setLayoutManager(new LinearLayoutManager(this));
-    }
-
-    @Override
-    protected void onStart() {
-        super.onStart();
-
-//        ordersRef = new ArrayList<AdminOrders>();
-//        ordersRef.add(new AdminOrders("123","1","2","3","4","Not Shipped","Nov 03. 2021","Nov 03. 2021","429"));
-        AdminOrdersAdapter adapter = new AdminOrdersAdapter(ordersRef,this);
-        ordersList.setAdapter(adapter);
     }
 
     public class  AdminOrdersAdapter extends RecyclerView.Adapter<AdminOrdersViewHolder> {
@@ -91,14 +95,16 @@ public class AdminNewOrdersActivity extends AppCompatActivity {
             holder.userName.setText("Name: "+model.getName());
             holder.userPhoneNumber.setText("Phone: "+model.getPhone());
             holder.userTotalPrice.setText("Total Ammount = "+model.getTotalAmount()+ " VND");
-            holder.userDateTime.setText("Order at: "+model.getDate()+" "+ model.getTime());
+            holder.userDateTime.setText("Order at: "+ model.getTime());
             holder.userShippingAddress.setText("Shipping Address: "+model.getAddress()+", "+model.getCity());
             holder.showOrdersBtn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     //String uID = getRef(position).getKey();
-                    String uID = model.getuID();
+                    String uID = model.getUid();
+                    Log.e("abcde",model.toString());
                     Intent intent = new Intent(AdminNewOrdersActivity.this,AdminUserProductsActivity.class);
+
                     intent.putExtra("uid",uID);
                     startActivity(intent);
                 }
@@ -121,7 +127,9 @@ public class AdminNewOrdersActivity extends AppCompatActivity {
                         public void onClick(DialogInterface dialogInterface, int i) {
                             if (i==0){
                                 //String uID = getRef(position).getKey();
-                                String uID = model.getuID();
+                                String uID = model.getUid();
+                                Log.e("abcdef",uID);
+                                Log.e("abcdef",model.toString());
                                 RemoverOrder(uID);
 
                             }
@@ -139,7 +147,8 @@ public class AdminNewOrdersActivity extends AppCompatActivity {
 
         @Override
         public int getItemCount() {
-            return mListAdminOrders.size();
+            if (mListAdminOrders !=null) return mListAdminOrders.size();
+            return 0;
         }
     }
 
@@ -162,7 +171,7 @@ public class AdminNewOrdersActivity extends AppCompatActivity {
         ApiService.apiService.removeOrderByUID(uID).enqueue(new Callback<Void>() {
             @Override
             public void onResponse(Call<Void> call, Response<Void> response) {
-                Toast.makeText(AdminNewOrdersActivity.this,"Call API success",Toast.LENGTH_SHORT).show();
+                Toast.makeText(AdminNewOrdersActivity.this,"Remove success",Toast.LENGTH_SHORT).show();
             }
 
             @Override

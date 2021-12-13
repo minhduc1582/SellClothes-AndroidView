@@ -26,6 +26,7 @@
             android:layout_centerVertical="true"
             android:padding="9dp"
             android:textColorHint="@color/colorPrimaryDark"
+            android:textColor="@color/colorPrimaryDark"
 
             />
         <Button

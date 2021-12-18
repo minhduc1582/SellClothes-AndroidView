@@ -7,13 +7,13 @@ import android.widget.TextView;
 
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.app.shopping.Interface.ItemClickListner;
+//import com.app.shopping.Interface.ItemClickListner;
 import com.app.shopping.R;
-
-public class ProductViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+//implements View.OnClickListener
+public class ProductViewHolder extends RecyclerView.ViewHolder  {
     public TextView txtProductName, txtProductDescription, txtProductPrice;
     public ImageView imageView;
-    public ItemClickListner listner;
+//    public ItemClickListner listner;
     public ProductViewHolder(View itemView)
     {
         super(itemView);
@@ -25,15 +25,15 @@ public class ProductViewHolder extends RecyclerView.ViewHolder implements View.O
         txtProductPrice = (TextView) itemView.findViewById(R.id.product_price);
     }
 
-    public void setItemClickListner(ItemClickListner listner)
-    {
-        this.listner = listner;
-    }
-
-    @Override
-    public void onClick(View view)
-    {
-        listner.onClick(view, getAdapterPosition(), false);
-    }
+//    public void setItemClickListner(ItemClickListner listner)
+//    {
+//        this.listner = listner;
+//    }
+//
+//    @Override
+//    public void onClick(View view)
+//    {
+//        listner.onClick(view, getAdapterPosition(), false);
+//    }
 }
 

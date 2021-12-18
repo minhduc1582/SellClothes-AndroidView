@@ -1,4 +1,4 @@
-package com.app.shopping;
+package com.app.shopping.Controller;
 
 
 import android.content.Context;
@@ -16,22 +16,17 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.app.shopping.Api.ApiService;
-import com.app.shopping.Model.AdminOrders;
 import com.app.shopping.Model.Cart;
-import com.app.shopping.Prevalent.CartViewHolder;
-import com.firebase.ui.database.FirebaseRecyclerAdapter;
-import com.firebase.ui.database.FirebaseRecyclerOptions;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
+import com.app.shopping.R;
+import com.app.shopping.ViewHolder.CartViewHolder;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class AdminUserProductsActivity extends AppCompatActivity {
+public class AdminUserProductsController extends AppCompatActivity {
     private RecyclerView productsList;
     RecyclerView.LayoutManager layoutManager;
     //private DatabaseReference cartListRef;
@@ -56,16 +51,16 @@ public class AdminUserProductsActivity extends AppCompatActivity {
         ApiService.apiService.getListCartByUID(userID).enqueue(new Callback<List<Cart>>() {
             @Override
             public void onResponse(Call<List<Cart>> call, Response<List<Cart>> response) {
-                Toast.makeText(AdminUserProductsActivity.this, "Call API success", Toast.LENGTH_SHORT).show();
+                Toast.makeText(AdminUserProductsController.this, "Call API success", Toast.LENGTH_SHORT).show();
                 cartListRef = response.body();
 
-                CartAdapter adapter = new CartAdapter(cartListRef,AdminUserProductsActivity.this);
+                CartAdapter adapter = new CartAdapter(cartListRef,AdminUserProductsController.this);
                 productsList.setAdapter(adapter);
             }
 
             @Override
             public void onFailure(Call<List<Cart>> call, Throwable t) {
-                Toast.makeText(AdminUserProductsActivity.this, "Call API failure", Toast.LENGTH_SHORT).show();
+                Toast.makeText(AdminUserProductsController.this, "Call API failure", Toast.LENGTH_SHORT).show();
 
             }
         });

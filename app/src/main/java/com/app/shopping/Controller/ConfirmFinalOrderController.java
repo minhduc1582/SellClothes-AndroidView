@@ -1,4 +1,4 @@
-package com.app.shopping;
+package com.app.shopping.Controller;
 
 import android.content.Intent;
 
@@ -9,28 +9,23 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.app.shopping.Api.ApiService;
 import com.app.shopping.Model.Orders;
 import com.app.shopping.Model.Shipments;
 import com.app.shopping.Prevalent.Prevalent;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
+import com.app.shopping.R;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
-import java.util.HashMap;
 import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class ConfirmFinalOrderActivity extends AppCompatActivity {
+public class ConfirmFinalOrderController extends AppCompatActivity {
     private EditText nameEditText,phoneEditText,addressEditText,cityEditText;
     private Button confirmOrderBtn;
     private String totalAmount = "";
@@ -87,7 +82,7 @@ public class ConfirmFinalOrderActivity extends AppCompatActivity {
 
             @Override
             public void onFailure(Call<List<Orders>> call, Throwable t) {
-                Toast.makeText(ConfirmFinalOrderActivity.this,"fail 0",Toast.LENGTH_SHORT).show();
+                Toast.makeText(ConfirmFinalOrderController.this,"fail 0",Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -99,13 +94,13 @@ public class ConfirmFinalOrderActivity extends AppCompatActivity {
 
             @Override
             public void onResponse(Call<Orders> call, Response<Orders> response) {
-                Toast.makeText(ConfirmFinalOrderActivity.this,"Update orders success.",Toast.LENGTH_SHORT).show();
+                Toast.makeText(ConfirmFinalOrderController.this,"Update orders success.",Toast.LENGTH_SHORT).show();
                 AddShipment();
             }
 
             @Override
             public void onFailure(Call<Orders> call, Throwable t) {
-                Toast.makeText(ConfirmFinalOrderActivity.this,"fail 2.",Toast.LENGTH_SHORT).show();
+                Toast.makeText(ConfirmFinalOrderController.this,"fail 2.",Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -129,15 +124,15 @@ public class ConfirmFinalOrderActivity extends AppCompatActivity {
 
             @Override
             public void onResponse(Call<Void> call, Response<Void> response) {
-                Toast.makeText(ConfirmFinalOrderActivity.this,"Your final Order has been placed successfully.",Toast.LENGTH_SHORT).show();
-                Intent intent = new Intent(ConfirmFinalOrderActivity.this,HomeActivity.class);
+                Toast.makeText(ConfirmFinalOrderController.this,"Your final Order has been placed successfully.",Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(ConfirmFinalOrderController.this, HomeController.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                 startActivity(intent);
             }
 
             @Override
             public void onFailure(Call<Void> call, Throwable t) {
-                Toast.makeText(ConfirmFinalOrderActivity.this,"fail",Toast.LENGTH_SHORT).show();
+                Toast.makeText(ConfirmFinalOrderController.this,"fail",Toast.LENGTH_SHORT).show();
             }
         });
     }

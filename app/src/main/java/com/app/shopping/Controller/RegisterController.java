@@ -1,4 +1,4 @@
-package com.app.shopping;
+package com.app.shopping.Controller;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
@@ -11,26 +11,17 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.app.shopping.Api.ApiService;
 import com.app.shopping.Model.Users;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
-
-import java.util.HashMap;
+import com.app.shopping.R;
 
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class RegisterActivity extends AppCompatActivity {
+public class RegisterController extends AppCompatActivity {
     private Button CreateAccountButton;
     private EditText InputName, InputPhoneNumber, InputPassword;
     private ProgressDialog loadingBar;
@@ -82,18 +73,18 @@ public class RegisterActivity extends AppCompatActivity {
         ApiService.apiService.addUser(userdata).enqueue(new Callback<Users>() {
             @Override
             public void onResponse(Call<Users> call, Response<Users> response) {
-                Toast.makeText(RegisterActivity.this, "Congratulations, your account has been created.", Toast.LENGTH_SHORT).show();
+                Toast.makeText(RegisterController.this, "Congratulations, your account has been created.", Toast.LENGTH_SHORT).show();
                 loadingBar.dismiss();
-                Intent intent = new Intent(RegisterActivity.this, com.app.shopping.LoginActivity.class);
+                Intent intent = new Intent(RegisterController.this, LoginController.class);
                 startActivity(intent);
             }
             @Override
             public void onFailure(Call<Users> call, Throwable t) {
-                Toast.makeText(RegisterActivity.this, "This " + phone + " already exists.", Toast.LENGTH_SHORT).show();
+                Toast.makeText(RegisterController.this, "This " + phone + " already exists.", Toast.LENGTH_SHORT).show();
                 loadingBar.dismiss();
                 Log.e("abc",t.getMessage());
-                Toast.makeText(RegisterActivity.this, "Please try again using another phone number.", Toast.LENGTH_SHORT).show();
-                Intent intent = new Intent(RegisterActivity.this, com.app.shopping.MainActivity.class);
+                Toast.makeText(RegisterController.this, "Please try again using another phone number.", Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(RegisterController.this, MainController.class);
                 startActivity(intent);
             }
         });

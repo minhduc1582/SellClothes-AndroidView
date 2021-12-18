@@ -1,4 +1,4 @@
-package com.app.shopping;
+package com.app.shopping.Controller;
 
 import android.content.Context;
 import android.content.DialogInterface;
@@ -10,8 +10,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -22,6 +20,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.app.shopping.Api.ApiService;
 import com.app.shopping.Model.AdminOrders;
+import com.app.shopping.R;
+import com.app.shopping.ViewHolder.AdminOrdersViewHolder;
 
 import java.util.List;
 
@@ -29,7 +29,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class AdminNewOrdersActivity extends AppCompatActivity {
+public class AdminNewOrdersController extends AppCompatActivity {
     private RecyclerView ordersList;
     private List<AdminOrders> ordersRef;
     @Override
@@ -45,24 +45,21 @@ public class AdminNewOrdersActivity extends AppCompatActivity {
     protected void onStart() {
         super.onStart();
 
-//        ordersRef = new ArrayList<AdminOrders>();
-//        ordersRef.add(new AdminOrders("123","1","2","3","4","Not Shipped","Nov 03. 2021","Nov 03. 2021","429"));
-
 
         ApiService.apiService.getAllAdminOrders().enqueue(new Callback<List<AdminOrders>>() {
             @Override
             public void onResponse(Call<List<AdminOrders>> call, Response<List<AdminOrders>> response) {
-                Toast.makeText(AdminNewOrdersActivity.this, "Call API success", Toast.LENGTH_SHORT).show();
+                Toast.makeText(AdminNewOrdersController.this, "Call API success", Toast.LENGTH_SHORT).show();
 
                 ordersRef = response.body();
-                AdminOrdersAdapter adapter = new AdminOrdersAdapter(ordersRef,AdminNewOrdersActivity.this);
+                AdminOrdersAdapter adapter = new AdminOrdersAdapter(ordersRef, AdminNewOrdersController.this);
                 ordersList.setAdapter(adapter);
 
             }
 
             @Override
             public void onFailure(Call<List<AdminOrders>> call, Throwable t) {
-                Toast.makeText(AdminNewOrdersActivity.this, "Call API failure", Toast.LENGTH_SHORT).show();
+                Toast.makeText(AdminNewOrdersController.this, "Call API failure", Toast.LENGTH_SHORT).show();
 
             }
 
@@ -103,7 +100,7 @@ public class AdminNewOrdersActivity extends AppCompatActivity {
                     //String uID = getRef(position).getKey();
                     String uID = model.getUid();
                     Log.e("abcde",model.toString());
-                    Intent intent = new Intent(AdminNewOrdersActivity.this,AdminUserProductsActivity.class);
+                    Intent intent = new Intent(AdminNewOrdersController.this, AdminUserProductsController.class);
 
                     intent.putExtra("uid",uID);
                     startActivity(intent);
@@ -120,7 +117,7 @@ public class AdminNewOrdersActivity extends AppCompatActivity {
 
                     };
 
-                    AlertDialog.Builder builder = new AlertDialog.Builder(AdminNewOrdersActivity.this);
+                    AlertDialog.Builder builder = new AlertDialog.Builder(AdminNewOrdersController.this);
                     builder.setTitle("Have you shipped this order products?");
                     builder.setItems(options, new DialogInterface.OnClickListener() {
                         @Override
@@ -152,31 +149,17 @@ public class AdminNewOrdersActivity extends AppCompatActivity {
         }
     }
 
-    public static class AdminOrdersViewHolder extends RecyclerView.ViewHolder{
-
-        public TextView userName, userPhoneNumber,userTotalPrice,userDateTime,userShippingAddress;
-        public Button showOrdersBtn;
-        public AdminOrdersViewHolder(View itemView) {
-            super(itemView);
-            userName = itemView.findViewById(R.id.order_user_name);
-            userPhoneNumber = itemView.findViewById(R.id.order_phone_number);
-            userTotalPrice = itemView.findViewById(R.id.order_total_price);
-            userDateTime = itemView.findViewById(R.id.order_date_time);
-            userShippingAddress = itemView.findViewById(R.id.order_address_city);
-            showOrdersBtn = itemView.findViewById(R.id.show_all_product_btn);
-        }
-    }
     private void RemoverOrder(String uID) {
        // ordersRef.child(uID).removeValue();
         ApiService.apiService.removeOrderByUID(uID).enqueue(new Callback<Void>() {
             @Override
             public void onResponse(Call<Void> call, Response<Void> response) {
-                Toast.makeText(AdminNewOrdersActivity.this,"Remove success",Toast.LENGTH_SHORT).show();
+                Toast.makeText(AdminNewOrdersController.this,"Remove success",Toast.LENGTH_SHORT).show();
             }
 
             @Override
             public void onFailure(Call<Void> call, Throwable t) {
-                Toast.makeText(AdminNewOrdersActivity.this,"Call API failure",Toast.LENGTH_SHORT).show();
+                Toast.makeText(AdminNewOrdersController.this,"Call API failure",Toast.LENGTH_SHORT).show();
             }
         });
     }

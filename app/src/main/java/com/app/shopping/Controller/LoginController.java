@@ -1,4 +1,4 @@
-package com.app.shopping;
+package com.app.shopping.Controller;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
@@ -16,6 +16,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.app.shopping.Api.ApiService;
 import com.app.shopping.Model.Users;
 import com.app.shopping.Prevalent.Prevalent;
+import com.app.shopping.R;
 import com.rey.material.widget.CheckBox;
 
 import io.paperdb.Paper;
@@ -23,7 +24,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class LoginActivity extends AppCompatActivity {
+public class LoginController extends AppCompatActivity {
     private EditText InputPhoneNumber, InputPassword;
     private Button LoginButton;
     private ProgressDialog loadingBar;
@@ -95,10 +96,6 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void AllowAccessToAccount(final String phone, final String password) {
-//        Toast.makeText(LoginActivity.this, "Welcome Admin, you are logged in Successfully...", Toast.LENGTH_SHORT).show();
-//        loadingBar.dismiss();
-//        Intent intent = new Intent(LoginActivity.this,AdminCategoryActivity.class);
-//        startActivity(intent);
         ApiService.apiService.checkLogin(phone, password, level).enqueue(new Callback<Users>() {
 
             @Override
@@ -106,30 +103,30 @@ public class LoginActivity extends AppCompatActivity {
                 Users usersData = response.body();
                 if (usersData != null) {
                     if (level == 2) {
-                        Toast.makeText(LoginActivity.this, "Welcome Admin, you are logged in Successfully...", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(LoginController.this, "Welcome Admin, you are logged in Successfully...", Toast.LENGTH_SHORT).show();
                         loadingBar.dismiss();
 
-                        Intent intent = new Intent(LoginActivity.this, AdminCategoryActivity.class);
+                        Intent intent = new Intent(LoginController.this, AdminCategoryController.class);
                         startActivity(intent);
                     } else {
-                        Toast.makeText(LoginActivity.this, "logged in Successfully...", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(LoginController.this, "logged in Successfully...", Toast.LENGTH_SHORT).show();
                         loadingBar.dismiss();
 
-                        Intent intent = new Intent(LoginActivity.this, HomeActivity.class);
+                        Intent intent = new Intent(LoginController.this, HomeController.class);
                         Prevalent.currentOnlineUser = usersData;
                         Log.e("abc",Prevalent.currentOnlineUser.getPhone());
                         startActivity(intent);
                     }
 
                 } else {
-                    Toast.makeText(LoginActivity.this, "Wrong account or password please try again.", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(LoginController.this, "Wrong account or password please try again.", Toast.LENGTH_SHORT).show();
                     loadingBar.dismiss();
                 }
             }
 
             @Override
             public void onFailure(Call<Users> call, Throwable t) {
-                Toast.makeText(LoginActivity.this, "Call API fail", Toast.LENGTH_SHORT).show();
+                Toast.makeText(LoginController.this, "Call API fail", Toast.LENGTH_SHORT).show();
             }
         });
     }

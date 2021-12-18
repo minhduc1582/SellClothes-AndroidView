@@ -1,4 +1,4 @@
-package com.app.shopping;
+package com.app.shopping.Controller;
 
 import android.content.Context;
 import android.content.DialogInterface;
@@ -23,17 +23,9 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.app.shopping.Api.ApiService;
 import com.app.shopping.Model.Cart;
 import com.app.shopping.Model.Orders;
-import com.app.shopping.Prevalent.CartViewHolder;
+import com.app.shopping.R;
+import com.app.shopping.ViewHolder.CartViewHolder;
 import com.app.shopping.Prevalent.Prevalent;
-import com.firebase.ui.database.FirebaseRecyclerAdapter;
-import com.firebase.ui.database.FirebaseRecyclerOptions;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
 
 import java.util.List;
 
@@ -41,7 +33,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class CartActivity extends AppCompatActivity{
+public class CartController extends AppCompatActivity{
     private RecyclerView recyclerView;
     private RecyclerView.LayoutManager layoutManager;
     private Button NextProcessBtn;
@@ -63,7 +55,7 @@ public class CartActivity extends AppCompatActivity{
             @Override
             public void onClick(View view) {
 //                txtTotalAmount.setText("Total Price = "+String.valueOf(overTotalPrice)+" VND");
-                Intent intent = new Intent(CartActivity.this,ConfirmFinalOrderActivity.class);
+                Intent intent = new Intent(CartController.this, ConfirmFinalOrderController.class);
                 intent.putExtra("Total Price", String.valueOf(overTotalPrice));
                 startActivity(intent);
                 finish();
@@ -79,9 +71,9 @@ public class CartActivity extends AppCompatActivity{
         ApiService.apiService.getListCartByUID(Prevalent.currentOnlineUser.getPhone()).enqueue(new Callback<List<Cart>>() {
             @Override
             public void onResponse(Call<List<Cart>> call, Response<List<Cart>> response) {
-                Toast.makeText(CartActivity.this, "Call API success", Toast.LENGTH_SHORT).show();
+                Toast.makeText(CartController.this, "Call API success", Toast.LENGTH_SHORT).show();
                 cartListRef = response.body();
-                CartAdapter adapter = new CartAdapter(cartListRef,CartActivity.this);
+                CartAdapter adapter = new CartAdapter(cartListRef, CartController.this);
                 recyclerView.setAdapter(adapter);
                 Log.e("abcdef",String.valueOf(overTotalPrice));
          //       txtTotalAmount.setText("Total Price = "+String.valueOf(overTotalPrice)+" VND");
@@ -89,7 +81,7 @@ public class CartActivity extends AppCompatActivity{
 
             @Override
             public void onFailure(Call<List<Cart>> call, Throwable t) {
-                Toast.makeText(CartActivity.this, "Call API failure", Toast.LENGTH_SHORT).show();
+                Toast.makeText(CartController.this, "Call API failure", Toast.LENGTH_SHORT).show();
 
             }
         });
@@ -129,13 +121,13 @@ public class CartActivity extends AppCompatActivity{
                                     "Edit",
                                     "Remove"
                             };
-                    AlertDialog.Builder builder = new AlertDialog.Builder(CartActivity.this);
+                    AlertDialog.Builder builder = new AlertDialog.Builder(CartController.this);
                     builder.setTitle("Cart Options: ");
                     builder.setItems(options, new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialogInterface, int i) {
                             if (i == 0) {
-                                Intent intent = new Intent(CartActivity.this, ProductDetailsActivity.class);
+                                Intent intent = new Intent(CartController.this, ProductDetailsController.class);
                                 intent.putExtra("pid", model.getPid());
                                 startActivity(intent);
                             }
@@ -143,14 +135,14 @@ public class CartActivity extends AppCompatActivity{
                                 ApiService.apiService.removeDetailOrderById(model.getIdDetailorder()).enqueue(new Callback<Void>() {
                                     @Override
                                     public void onResponse(Call<Void> call, Response<Void> response) {
-                                        Toast.makeText(CartActivity.this, "Item removed Successfully.", Toast.LENGTH_SHORT).show();
-                                        Intent intent = new Intent(CartActivity.this, HomeActivity.class);
+                                        Toast.makeText(CartController.this, "Item removed Successfully.", Toast.LENGTH_SHORT).show();
+                                        Intent intent = new Intent(CartController.this, HomeController.class);
                                         startActivity(intent);
                                     }
 
                                     @Override
                                     public void onFailure(Call<Void> call, Throwable t) {
-                                        Toast.makeText(CartActivity.this, "Item removed Fail.", Toast.LENGTH_SHORT).show();
+                                        Toast.makeText(CartController.this, "Item removed Fail.", Toast.LENGTH_SHORT).show();
 
                                     }
                                 });
@@ -187,7 +179,7 @@ public class CartActivity extends AppCompatActivity{
                     recyclerView.setVisibility(View.GONE);
                     txtMsg1.setVisibility(View.VISIBLE);
                     NextProcessBtn.setVisibility(View.GONE);
-                    Toast.makeText(CartActivity.this,"You can purchase more products, Once you received your first order",Toast.LENGTH_SHORT).show();
+                    Toast.makeText(CartController.this,"You can purchase more products, Once you received your first order",Toast.LENGTH_SHORT).show();
 //                    } else {
                   //  state = Order.getState();
                 }
@@ -195,7 +187,7 @@ public class CartActivity extends AppCompatActivity{
 
             @Override
             public void onFailure(Call<List<Orders>> call, Throwable t) {
-                Toast.makeText(CartActivity.this, "Call API fail", Toast.LENGTH_SHORT).show();
+                Toast.makeText(CartController.this, "Call API fail", Toast.LENGTH_SHORT).show();
             }
         });
     }

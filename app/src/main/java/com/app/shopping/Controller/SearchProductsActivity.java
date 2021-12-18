@@ -1,4 +1,4 @@
-package com.app.shopping;
+package com.app.shopping.Controller;
 
 import android.content.Context;
 import android.content.Intent;
@@ -19,11 +19,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.app.shopping.Api.ApiService;
 import com.app.shopping.Model.Products;
+import com.app.shopping.R;
 import com.app.shopping.ViewHolder.ProductViewHolder;
-import com.firebase.ui.database.FirebaseRecyclerAdapter;
-import com.firebase.ui.database.FirebaseRecyclerOptions;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
@@ -106,7 +103,7 @@ public class SearchProductsActivity extends AppCompatActivity {
             holder.itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    Intent intent =new Intent(SearchProductsActivity.this,ProductDetailsActivity.class);
+                    Intent intent =new Intent(SearchProductsActivity.this, ProductDetailsController.class);
                     intent.putExtra("pid",model.getPid());
                     startActivity(intent);
                 }

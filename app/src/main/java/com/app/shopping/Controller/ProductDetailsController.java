@@ -1,4 +1,4 @@
-package com.app.shopping;
+package com.app.shopping.Controller;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -14,6 +14,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.app.shopping.Api.ApiService;
 import com.app.shopping.Model.DetailOrder;
 import com.app.shopping.Model.Orders;
+import com.app.shopping.R;
 import com.cepheuen.elegantnumberbutton.view.ElegantNumberButton;
 import com.app.shopping.Model.Products;
 import com.app.shopping.Prevalent.Prevalent;
@@ -25,7 +26,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class ProductDetailsActivity extends AppCompatActivity {
+public class ProductDetailsController extends AppCompatActivity {
     private Button addToCartButton;
     private ImageView productImage;
     private ElegantNumberButton numberButton;
@@ -50,7 +51,7 @@ public class ProductDetailsActivity extends AppCompatActivity {
             public void onClick(View view) {
 
                 if (state.equals("Confirmed") ){
-                    Toast.makeText(ProductDetailsActivity.this,"You can add Purchase more product, once your order is shipped or confirmed",Toast.LENGTH_LONG).show();
+                    Toast.makeText(ProductDetailsController.this,"You can add Purchase more product, once your order is shipped or confirmed",Toast.LENGTH_LONG).show();
                 }
                 else
                 {
@@ -74,7 +75,7 @@ public class ProductDetailsActivity extends AppCompatActivity {
             public void onResponse(Call<List<Orders>> call, Response<List<Orders>> response) {
                 order = response.body();
                 Log.e("abcd getOrdersByUID",order.toString());
-                Toast.makeText(ProductDetailsActivity.this,"call api success getOrdersByUID",Toast.LENGTH_SHORT).show();
+                Toast.makeText(ProductDetailsController.this,"call api success getOrdersByUID",Toast.LENGTH_SHORT).show();
                 if (order.size() == 0) {
                     Orders orderRef = new Orders();
                     orderRef.setUid(Prevalent.currentOnlineUser.getPhone());
@@ -85,13 +86,13 @@ public class ProductDetailsActivity extends AppCompatActivity {
                         public void onResponse(Call<Orders> call, Response<Orders> response) {
                             order.add( response.body());
                             Log.e("abcd addOrder",order.toString());
-                            Toast.makeText(ProductDetailsActivity.this,"add Order success",Toast.LENGTH_SHORT).show();
+                            Toast.makeText(ProductDetailsController.this,"add Order success",Toast.LENGTH_SHORT).show();
                             getDetailOrdersByIdorderAndPid();
                         }
 
                         @Override
                         public void onFailure(Call<Orders> call, Throwable t) {
-                            Toast.makeText(ProductDetailsActivity.this,"Call api fail addOrder",Toast.LENGTH_SHORT).show();
+                            Toast.makeText(ProductDetailsController.this,"Call api fail addOrder",Toast.LENGTH_SHORT).show();
 
                         }
                     });
@@ -102,7 +103,7 @@ public class ProductDetailsActivity extends AppCompatActivity {
 
             @Override
             public void onFailure(Call<List<Orders>> call, Throwable t) {
-                Toast.makeText(ProductDetailsActivity.this,"Call api fail getOrdersByUID",Toast.LENGTH_SHORT).show();
+                Toast.makeText(ProductDetailsController.this,"Call api fail getOrdersByUID",Toast.LENGTH_SHORT).show();
                 }
             });
 
@@ -117,13 +118,13 @@ public class ProductDetailsActivity extends AppCompatActivity {
                 detailOrder = response.body();
                 Log.e("abcd getDetailOrdersByIdorderAndPid",detailOrder.toString());
                 addDetailOrder();
-                Toast.makeText(ProductDetailsActivity.this,"Call api success getDetailOrdersByIdorderAndPid",Toast.LENGTH_SHORT).show();
+                Toast.makeText(ProductDetailsController.this,"Call api success getDetailOrdersByIdorderAndPid",Toast.LENGTH_SHORT).show();
             }
 
             @Override
             public void onFailure(Call<List<DetailOrder>> call, Throwable t) {
                 Log.e("abc",t.getMessage());
-                Toast.makeText(ProductDetailsActivity.this,"Call api fail getDetailOrdersByIdorderAndPid",Toast.LENGTH_SHORT).show();
+                Toast.makeText(ProductDetailsController.this,"Call api fail getDetailOrdersByIdorderAndPid",Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -140,14 +141,14 @@ public class ProductDetailsActivity extends AppCompatActivity {
                     detailOrder.add(response.body());
                     Log.e("abcd addDetailOrder",detailOrderRef.toString());
                     Log.e("abcd addDetailOrder",detailOrder.toString());
-                    Toast.makeText(ProductDetailsActivity.this,"Added to cart List addDetailOrder",Toast.LENGTH_SHORT).show();
-                    Intent intent = new Intent(ProductDetailsActivity.this,HomeActivity.class);
+                    Toast.makeText(ProductDetailsController.this,"Added to cart List addDetailOrder",Toast.LENGTH_SHORT).show();
+                    Intent intent = new Intent(ProductDetailsController.this, HomeController.class);
                     startActivity(intent);
                 }
 
                 @Override
                 public void onFailure(Call<DetailOrder> call, Throwable t) {
-                    Toast.makeText(ProductDetailsActivity.this,"Call api fail addDetailOrder",Toast.LENGTH_SHORT).show();
+                    Toast.makeText(ProductDetailsController.this,"Call api fail addDetailOrder",Toast.LENGTH_SHORT).show();
                 }
             });
         } else {
@@ -160,14 +161,14 @@ public class ProductDetailsActivity extends AppCompatActivity {
                 public void onResponse(Call<DetailOrder> call, Response<DetailOrder> response) {
                     detailOrder.add(response.body());
                     Log.e("abcd updateDetailOrder",detailOrder.toString());
-                    Toast.makeText(ProductDetailsActivity.this,"Updated to cart List updateDetailOrder",Toast.LENGTH_SHORT).show();
-                    Intent intent = new Intent(ProductDetailsActivity.this,HomeActivity.class);
+                    Toast.makeText(ProductDetailsController.this,"Updated to cart List updateDetailOrder",Toast.LENGTH_SHORT).show();
+                    Intent intent = new Intent(ProductDetailsController.this, HomeController.class);
                     startActivity(intent);
                 }
 
                 @Override
                 public void onFailure(Call<DetailOrder> call, Throwable t) {
-                    Toast.makeText(ProductDetailsActivity.this,"Call api fail updateDetailOrder",Toast.LENGTH_SHORT).show();
+                    Toast.makeText(ProductDetailsController.this,"Call api fail updateDetailOrder",Toast.LENGTH_SHORT).show();
                 }
             });
         }
@@ -177,18 +178,18 @@ public class ProductDetailsActivity extends AppCompatActivity {
 
             @Override
             public void onResponse(Call<Products> call, Response<Products> response) {
-                Toast.makeText(ProductDetailsActivity.this, "Call api success getProductByPid", Toast.LENGTH_SHORT).show();
+                Toast.makeText(ProductDetailsController.this, "Call api success getProductByPid", Toast.LENGTH_SHORT).show();
                 Products products = response.body();
                 Log.e("abcd getProductByPid",products.toString());
                 productName.setText(products.getPname());
-                productPrice.setText(products.getPrice());
+                productPrice.setText(products.getPrice()+" VND");
                 productDescription.setText(products.getDescription());
                 Picasso.get().load(products.getImage()).into(productImage);
             }
 
             @Override
             public void onFailure(Call<Products> call, Throwable t) {
-                Toast.makeText(ProductDetailsActivity.this, "Call api fail getProductByPid"  , Toast.LENGTH_SHORT).show();
+                Toast.makeText(ProductDetailsController.this, "Call api fail getProductByPid"  , Toast.LENGTH_SHORT).show();
 
             }
         });
@@ -202,7 +203,7 @@ public class ProductDetailsActivity extends AppCompatActivity {
                 public void onResponse(Call<List<Orders>> call, Response<List<Orders>> response) {
                     List<Orders> Order = response.body();
                     Log.e("abcd getOrdersByUID",Order.toString());
-                    Toast.makeText(ProductDetailsActivity.this, "Call API success getOrdersByUID 2", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(ProductDetailsController.this, "Call API success getOrdersByUID 2", Toast.LENGTH_SHORT).show();
                     if (Order.size() == 0) {
                         state = "Not confirmed";
                     } else {
@@ -214,7 +215,7 @@ public class ProductDetailsActivity extends AppCompatActivity {
                 public void onFailure(Call<List<Orders>> call, Throwable t) {
                     Log.e("abc2",Prevalent.currentOnlineUser.getPhone());
                     Log.e("abc",t.getMessage());
-                    Toast.makeText(ProductDetailsActivity.this, "Call API fail getOrdersByUID 2", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(ProductDetailsController.this, "Call API fail getOrdersByUID 2", Toast.LENGTH_SHORT).show();
                 }
             });
         }

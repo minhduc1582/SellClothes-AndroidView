@@ -16,23 +16,23 @@
         android:usesCleartextTraffic="true"
         android:theme="@style/Theme.Ekart"
         tools:replace="android:theme">
-        <activity android:name="com.app.shopping.HomeActivity"
+        <activity android:name="com.app.shopping.Controller.HomeController"
 
             android:theme="@style/Theme.AppCompat.NoActionBar"/>
-        <activity android:name="com.app.shopping.SettinsActivity" />
-        <activity android:name="com.app.shopping.SearchProductsActivity" />
-        <activity android:name="com.app.shopping.RegisterActivity" />
-        <activity android:name="com.app.shopping.ProductDetailsActivity" />
-        <activity android:name="com.app.shopping.LoginActivity" />
-        <activity android:name="com.app.shopping.ConfirmFinalOrderActivity" />
-        <activity android:name="com.app.shopping.CartActivity" />
-        <activity android:name="com.app.shopping.AdminUserProductsActivity" />
-        <activity android:name="com.app.shopping.AdminNewOrdersActivity" />
-        <activity android:name="com.app.shopping.AdminCategoryActivity" />
-        <activity android:name="com.app.shopping.AdminAddNewProductActivity"
+<!--        <activity android:name="com.app.shopping.SettinsActivity" />-->
+        <activity android:name="com.app.shopping.Controller.SearchProductsActivity" />
+        <activity android:name="com.app.shopping.Controller.RegisterController" />
+        <activity android:name="com.app.shopping.Controller.ProductDetailsController" />
+        <activity android:name="com.app.shopping.Controller.LoginController" />
+        <activity android:name="com.app.shopping.Controller.ConfirmFinalOrderController" />
+        <activity android:name="com.app.shopping.Controller.CartController" />
+        <activity android:name="com.app.shopping.Controller.AdminUserProductsController" />
+        <activity android:name="com.app.shopping.Controller.AdminNewOrdersController" />
+        <activity android:name="com.app.shopping.Controller.AdminCategoryController" />
+        <activity android:name="com.app.shopping.Controller.AdminAddNewProductController"
             android:exported="true"/>
 
-        <activity android:name="com.app.shopping.MainActivity">
+        <activity android:name="com.app.shopping.Controller.MainController">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

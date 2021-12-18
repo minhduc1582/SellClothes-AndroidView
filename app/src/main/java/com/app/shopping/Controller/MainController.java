@@ -1,4 +1,4 @@
-package com.app.shopping;
+package com.app.shopping.Controller;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
@@ -9,9 +9,11 @@ import android.widget.Button;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.app.shopping.R;
+
 import io.paperdb.Paper;
 
-public class MainActivity extends AppCompatActivity {
+public class MainController extends AppCompatActivity {
     private Button joinNowButton, loginButton;
     private ProgressDialog loadingBar;
     @Override
@@ -26,7 +28,7 @@ public class MainActivity extends AppCompatActivity {
         loginButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(MainActivity.this, com.app.shopping.LoginActivity.class);
+                Intent intent = new Intent(MainController.this, LoginController.class);
                 startActivity(intent);
             }
         });
@@ -34,7 +36,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view)
             {
-                Intent intent = new Intent(MainActivity.this, RegisterActivity.class);
+                Intent intent = new Intent(MainController.this, RegisterController.class);
                 startActivity(intent);
             }
         });

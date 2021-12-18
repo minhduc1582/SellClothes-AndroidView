@@ -1,4 +1,4 @@
-package com.app.shopping;
+package com.app.shopping.Controller;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
@@ -24,19 +24,14 @@ import android.widget.Toast;
 import androidx.appcompat.widget.Toolbar;
 
 import com.app.shopping.Api.ApiService;
-import com.app.shopping.Model.Cart;
 import com.app.shopping.Model.Products;
 import com.app.shopping.Prevalent.Prevalent;
+import com.app.shopping.R;
 import com.app.shopping.ViewHolder.ProductViewHolder;
-import com.firebase.ui.database.FirebaseRecyclerAdapter;
-import com.firebase.ui.database.FirebaseRecyclerOptions;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
 import com.squareup.picasso.Picasso;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
@@ -45,7 +40,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class HomeActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
+public class HomeController extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 //    private DatabaseReference ProductsRef;
     private List<Products> ProductsRef;
     DrawerLayout drawerLayout;
@@ -91,7 +86,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(HomeActivity.this,CartActivity.class);
+                Intent intent = new Intent(HomeController.this, CartController.class);
                 startActivity(intent);
             }
         });
@@ -104,18 +99,18 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
 
             @Override
             public void onResponse(Call<List<Products>> call, Response<List<Products>> response) {
-                Toast.makeText(HomeActivity.this, "Call API success getAllProduct" , Toast.LENGTH_SHORT).show();
+                Toast.makeText(HomeController.this, "Call API success getAllProduct" , Toast.LENGTH_SHORT).show();
                 ProductsRef = response.body();
                 //Toast.makeText(HomeActivity.this, ProductsRef.size()+"" , Toast.LENGTH_SHORT).show();
                 Log.e("abc","1");
 
-                ProductsAdapter adapter = new ProductsAdapter(ProductsRef,HomeActivity.this);
+                ProductsAdapter adapter = new ProductsAdapter(ProductsRef, HomeController.this);
                 recyclerView.setAdapter(adapter);
             }
 
             @Override
             public void onFailure(Call<List<Products>> call, Throwable t) {
-                Toast.makeText(HomeActivity.this, "Call API fail getAllProduct", Toast.LENGTH_SHORT).show();
+                Toast.makeText(HomeController.this, "Call API fail getAllProduct", Toast.LENGTH_SHORT).show();
 
             }
         });
@@ -151,7 +146,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
             holder.itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    Intent intent =new Intent(HomeActivity.this,ProductDetailsActivity.class);
+                    Intent intent =new Intent(HomeController.this, ProductDetailsController.class);
                     intent.putExtra("pid",model.getPid());
                     startActivity(intent);
                 }
@@ -191,9 +186,6 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-//        if (id == R.id.action_settings) {
-//            return true;
-//        }
 
         return super.onOptionsItemSelected(item);
     }
@@ -207,10 +199,10 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         int id = item.getItemId();
 
         if (id == R.id.nav_cart) {
-            Intent intent = new Intent(HomeActivity.this,CartActivity.class);
+            Intent intent = new Intent(HomeController.this, CartController.class);
             startActivity(intent);
         } else if (id == R.id.nav_search) {
-            Intent intent = new Intent(HomeActivity.this,SearchProductsActivity.class);
+            Intent intent = new Intent(HomeController.this,SearchProductsActivity.class);
             startActivity(intent);
 
 //        } else if (id == R.id.nav_categories) {
@@ -221,7 +213,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
 
         } else if (id == R.id.nav_logout) {
             Paper.book().destroy();
-            Intent intent=new Intent(HomeActivity.this,MainActivity.class);
+            Intent intent=new Intent(HomeController.this, MainController.class);
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK |Intent.FLAG_ACTIVITY_CLEAR_TASK );
             startActivity(intent);
             finish();
